@@ -207,7 +207,8 @@ st.markdown(
     <style>
     .stApp { background-color: #0B0F19; }
     html, body, [class*="css"]  { color: #EBEFF7; }
-    .block-container { max-width: 780px; padding-top: 2rem; }
+    .block-container { max-width: 780px; padding-top: 4rem !important; }
+    header[data-testid="stHeader"] { background: transparent; }
     .eyebrow {
         font-family: monospace; font-size: 12.5px; letter-spacing: .12em;
         text-transform: uppercase; color: #E8B24C;
