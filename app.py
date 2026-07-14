@@ -200,42 +200,132 @@ UNIDAD_4 = [
 LETTERS = ["a", "b", "c", "d"]
 
 # ---------------------------------------------------------------------------
-# Estilos
+# Estilos: fuentes, tema oscuro, hero con cubo isométrico animado (CSS puro)
 # ---------------------------------------------------------------------------
 st.markdown(
     """
     <style>
-    .stApp { background-color: #0B0F19; }
-    html, body, [class*="css"]  { color: #EBEFF7; }
-    .block-container { max-width: 780px; padding-top: 4rem !important; }
-    header[data-testid="stHeader"] { background: transparent; }
-    .eyebrow {
-        font-family: monospace; font-size: 12.5px; letter-spacing: .12em;
-        text-transform: uppercase; color: #E8B24C;
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    html, body, [class*="css"] { color: #EBEFF7; font-family: 'IBM Plex Sans', sans-serif; }
+    .stApp {
+        background:
+            radial-gradient(1200px 500px at 15% -10%, #16213a 0%, transparent 60%),
+            radial-gradient(900px 500px at 100% 0%, #1a1730 0%, transparent 55%),
+            #0B0F19;
     }
+    header[data-testid="stHeader"] { background: transparent; }
+    .block-container { max-width: 800px; padding-top: 4.2rem !important; padding-bottom: 4rem; }
+
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif !important; letter-spacing: -0.01em; }
+    .stApp h1 { font-size: 2.4rem !important; font-weight: 700 !important; }
+
+    .eyebrow {
+        font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; letter-spacing: .14em;
+        text-transform: uppercase; color: #E8B24C; display:block; margin-bottom: 6px;
+    }
+    .subtitle { color: #8C95AC; font-size: 15.5px; line-height: 1.6; max-width: 480px; }
+
+    /* ---- hero cube (puro CSS, sin JS) ---- */
+    .cube-wrap { width:150px; height:150px; position:relative; perspective:600px; margin: 0 auto; }
+    .cube {
+        position:absolute; inset:0; margin:auto; width:92px; height:92px;
+        transform-style:preserve-3d; transform:rotateX(-28deg) rotateY(-38deg);
+        animation:spin 22s linear infinite;
+    }
+    @keyframes spin { to { transform:rotateX(-28deg) rotateY(322deg); } }
+    .face { position:absolute; width:92px; height:92px; border:1px solid #3a4a72;
+        background:linear-gradient(135deg,#16203a,#101830); }
+    .face span { position:absolute; inset:0; background-image:
+        linear-gradient(#26324f 1px, transparent 1px),
+        linear-gradient(90deg, #26324f 1px, transparent 1px);
+        background-size:23px 23px; opacity:.6; }
+    .f-front{ transform: translateZ(46px); }
+    .f-back{ transform: rotateY(180deg) translateZ(46px); }
+    .f-right{ transform: rotateY(90deg) translateZ(46px); background:linear-gradient(135deg,#1a2542,#12192e); }
+    .f-left{ transform: rotateY(-90deg) translateZ(46px); background:linear-gradient(135deg,#1a2542,#12192e); }
+    .f-top{ transform: rotateX(90deg) translateZ(46px); background:linear-gradient(135deg,#1c2c46,#131c33); }
+    .f-bottom{ transform: rotateX(-90deg) translateZ(46px); }
+
+    /* ---- metrics ---- */
+    div[data-testid="stMetric"] {
+        background: #121A2B; border: 1px solid #26314A; border-radius: 12px; padding: 12px 16px;
+    }
+    div[data-testid="stMetricLabel"] {
+        font-family: 'IBM Plex Mono', monospace !important; font-size: 11.5px !important;
+        color: #8C95AC !important; text-transform: uppercase; letter-spacing: .06em;
+    }
+    div[data-testid="stMetricValue"] { font-family: 'Space Grotesk', sans-serif !important; }
+
+    /* ---- section divider ---- */
+    .divider-row { display:flex; align-items:center; gap:14px; margin: 40px 0 18px 0; }
+    .divider-badge {
+        font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600;
+        padding: 3px 10px; border-radius: 6px; color: #0B0F19;
+    }
+    .divider-badge.u3 { background: #4FD1C5; }
+    .divider-badge.u4 { background: #E8B24C; }
+    .divider-title { font-size: 20px; font-weight: 600; font-family: 'Space Grotesk', sans-serif; }
+    .divider-line { flex:1; height:1px; background: linear-gradient(90deg, #26314A, transparent); }
+
+    /* ---- question card ---- */
     .qcard {
         background: #121A2B; border: 1px solid #26314A; border-left: 3px solid #4FD1C5;
-        border-radius: 14px; padding: 18px 20px; margin-bottom: 14px;
+        border-radius: 14px; padding: 20px 22px 6px 22px; margin-bottom: 16px;
     }
     .qcard.u4 { border-left-color: #E8B24C; }
     .qmeta {
-        font-family: monospace; font-size: 11.5px; color: #8C95AC;
+        font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #8C95AC;
         text-transform: uppercase; letter-spacing: .06em;
     }
-    .qtext { font-size: 16px; font-weight: 600; margin: 6px 0 10px 0; }
-    .answer-good { color: #34D399; font-family: monospace; font-size: 13.5px; margin-top: 8px; }
-    .divider-title { font-size: 22px; font-weight: 700; margin: 30px 0 14px 0; }
+    .qtext { font-size: 16px; font-weight: 500; margin: 8px 0 12px 0; line-height: 1.5; }
+    .answer-good {
+        color: #34D399; font-family: 'IBM Plex Mono', monospace; font-size: 13px;
+        margin: 4px 0 14px 0; padding-top: 10px; border-top: 1px dashed #26314A;
+    }
+
+    /* ---- radio options styled as cards ---- */
+    div[data-testid="stRadio"] > div[role="radiogroup"] { gap: 8px; }
+    div[data-testid="stRadio"] label {
+        background: #17203570; border: 1px solid #26314A; border-radius: 9px;
+        padding: 9px 12px !important; margin-bottom: 0 !important; transition: .15s ease;
+    }
+    div[data-testid="stRadio"] label:hover { border-color: #3a4665; }
+    div[data-testid="stRadio"] label p { font-size: 14px !important; }
+
+    div[data-testid="stAlert"] { border-radius: 10px; font-family: 'IBM Plex Sans', sans-serif; }
+
+    footer, #MainMenu { visibility: hidden; }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-st.markdown('<span class="eyebrow">40 preguntas · opción múltiple</span>', unsafe_allow_html=True)
-st.title("Cubos, gobernanza y Big Data")
-st.write(
-    "Repaso combinado de la **Unidad 3** (cubos de información y minería de datos) "
-    "y la **Unidad 4** (tecnología Big Data), 20 preguntas por unidad."
-)
+hero_col1, hero_col2 = st.columns([2.3, 1], gap="large")
+with hero_col1:
+    st.markdown('<span class="eyebrow">40 preguntas · opción múltiple</span>', unsafe_allow_html=True)
+    st.markdown("# Cubos, gobernanza y Big Data")
+    st.markdown(
+        '<p class="subtitle">Repaso combinado de la <b>Unidad 3</b> (cubos de información y '
+        'minería de datos) y la <b>Unidad 4</b> (tecnología Big Data), 20 preguntas por unidad.</p>',
+        unsafe_allow_html=True,
+    )
+with hero_col2:
+    st.markdown(
+        """
+        <div class="cube-wrap">
+          <div class="cube">
+            <div class="face f-front"><span></span></div>
+            <div class="face f-back"><span></span></div>
+            <div class="face f-right"><span></span></div>
+            <div class="face f-left"><span></span></div>
+            <div class="face f-top"><span></span></div>
+            <div class="face f-bottom"><span></span></div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 modo_lectura = st.toggle("Modo lectura (mostrar todas las respuestas)", value=False)
 
@@ -249,7 +339,16 @@ col1, col2 = st.columns(2)
 col1.metric("Revisadas", f"{respondidas}/40")
 col2.metric("Correctas", f"{correctas}/{respondidas}" if respondidas else "0/0")
 
-st.divider()
+
+def render_divider(badge_class, badge_text, title):
+    st.markdown(
+        f'<div class="divider-row">'
+        f'<span class="divider-badge {badge_class}">{badge_text}</span>'
+        f'<span class="divider-title">{title}</span>'
+        f'<span class="divider-line"></span>'
+        f"</div>",
+        unsafe_allow_html=True,
+    )
 
 
 def render_question(idx, item, unidad_class, unidad_label):
@@ -284,17 +383,21 @@ def render_question(idx, item, unidad_class, unidad_label):
                 st.success(f"✓ Correcto — {labels[item['correct']]}")
             else:
                 st.error(f"✗ Incorrecto. Respuesta correcta: {labels[item['correct']]}")
+        st.markdown('<div style="height:10px"></div>', unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
 
-st.markdown('<div class="divider-title">🔷 Unidad 3 — Cubos de información y minería de datos</div>', unsafe_allow_html=True)
+render_divider("u3", "U3", "Cubos de información y minería de datos")
 for i, item in enumerate(UNIDAD_3, start=1):
     render_question(i, item, "u3", "Unidad 3")
 
-st.markdown('<div class="divider-title">🟠 Unidad 4 — Tecnología Big Data</div>', unsafe_allow_html=True)
+render_divider("u4", "U4", "Tecnología Big Data")
 for i, item in enumerate(UNIDAD_4, start=1):
     render_question(i + 20, item, "u4", "Unidad 4")
 
-st.divider()
-st.caption("Universidad de Guayaquil · Material de repaso generado a partir del contenido de Unidad 3 y Unidad 4")
+st.markdown(
+    '<p style="text-align:center; color:#8C95AC; font-family:\'IBM Plex Mono\',monospace; '
+    'font-size:12px; margin-top:40px;">Universidad de Guayaquil · Material de repaso — Unidad 3 y Unidad 4</p>',
+    unsafe_allow_html=True,
+)
