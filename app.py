@@ -331,6 +331,8 @@ modo_lectura = st.toggle("Modo lectura (mostrar todas las respuestas)", value=Fa
 
 if "answers" not in st.session_state:
     st.session_state.answers = {}
+if "celebrated" not in st.session_state:
+    st.session_state.celebrated = False
 
 respondidas = len(st.session_state.answers)
 correctas = sum(1 for v in st.session_state.answers.values() if v["correct"])
@@ -338,6 +340,57 @@ correctas = sum(1 for v in st.session_state.answers.values() if v["correct"])
 col1, col2 = st.columns(2)
 col1.metric("Revisadas", f"{respondidas}/40")
 col2.metric("Correctas", f"{correctas}/{respondidas}" if respondidas else "0/0")
+st.progress(respondidas / 40)
+
+
+def tier_info(pct):
+    if pct == 100:
+        return ("🏆", "¡Puntaje perfecto!", "Dominas por completo el contenido de las unidades 3 y 4.", "#34D399")
+    if pct >= 90:
+        return ("🥇", "¡Excelente!", "Tienes un dominio sobresaliente del tema.", "#34D399")
+    if pct >= 70:
+        return ("✅", "¡Muy bien!", "Buen manejo del contenido, con algunos detalles por repasar.", "#4FD1C5")
+    if pct >= 50:
+        return ("📘", "Vas bien", "Repasa los temas donde tuviste más fallos para reforzar.", "#E8B24C")
+    return ("📚", "Sigue practicando", "Te recomendamos repasar el contenido de las unidades 3 y 4.", "#F5716B")
+
+
+if respondidas == 40 and not modo_lectura:
+    pct = round(correctas / 40 * 100)
+    emoji, titulo, mensaje, color = tier_info(pct)
+
+    if not st.session_state.celebrated:
+        st.balloons()
+        st.session_state.celebrated = True
+
+    st.markdown(
+        f"""
+        <div style="
+            background: linear-gradient(180deg, #16203a, #121A2B);
+            border: 1px solid {color}55; border-radius:18px;
+            padding: 34px 24px; text-align:center; margin: 22px 0 34px 0;
+            box-shadow: 0 0 40px {color}22;">
+          <div style="font-size:44px; line-height:1;">{emoji}</div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:700; margin-top:10px; color:#EBEFF7;">
+            {titulo}
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-size:56px; font-weight:700; color:{color}; margin:8px 0;">
+            {correctas}/40
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace; color:#8C95AC; font-size:13px; letter-spacing:.05em;">
+            {pct}% DE RESPUESTAS CORRECTAS
+          </div>
+          <p style="color:#8C95AC; max-width:440px; margin:14px auto 0; font-size:14.5px; line-height:1.5;">
+            {mensaje}
+          </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    if st.button("🔄 Reiniciar cuestionario", use_container_width=True):
+        st.session_state.answers = {}
+        st.session_state.celebrated = False
+        st.rerun()
 
 
 def render_divider(badge_class, badge_text, title):
